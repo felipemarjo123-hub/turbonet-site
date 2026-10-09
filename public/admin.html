@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Turbonet – CRM</title>
+  <link rel="stylesheet" href="src/styles.css">
+  <style>
+    #login-section {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+    }
+    #login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    #error-msg {
+      color: red;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="logo">Turbo<span>net</span> CRM</div>
+    <nav>
+      <a href="/">← Site</a>
+      <button id="logout-btn" class="btn ghost" style="display: none; padding: 5px 15px;">Sair</button>
+    </nav>
+  </div>
+</header>
+
+<section id="login-section">
+  <h2>Acesso Restrito</h2>
+  <form id="login-form">
+    <input type="text" id="username" placeholder="Usuário" required>
+    <input type="password" id="password" placeholder="Senha" required>
+    <button type="submit" class="btn">Entrar</button>
+    <p id="error-msg" hidden></p>
+  </form>
+</section>
+
+<section id="crm-section" style="display: none;">
+  <div class="container">
+    <h2>Leads</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Nome</th>
+          <th>WhatsApp</th>
+          <th>Cidade</th>
+          <th>Plano</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+</section>
+
+<script type="module">
+import { getLeads, updateStatus, login, logout, checkAuth } from "./src/crm.js";
+
+const STATUS = ["novo", "contatado", "negociando", "fechado", "perdido"];
+const loginSection = document.getElementById("login-section");
+const crmSection = document.getElementById("crm-section");
+const loginForm = document.getElementById("login-form");
+const logoutBtn = document.getElementById("logout-btn");
+const errorMsg = document.getElementById("error-msg");
+
+async function init() {
+  const isAuthed = await checkAuth();
+  if (isAuthed) {
+    showCrm();
+  } else {
+    showLogin();
+  }
+}
+
+function showLogin() {
+  loginSection.style.display = "block";
+  crmSection.style.display = "none";
+  logoutBtn.style.display = "none";
+}
+
+async function showCrm() {
+  loginSection.style.display = "none";
+  crmSection.style.display = "block";
+  logoutBtn.style.display = "inline-block";
+  await render();
+}
+
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
+  try {
+    await login(u, p);
+    errorMsg.hidden = true;
+    showCrm();
+  } catch (err) {
+    errorMsg.textContent = "Usuário ou senha inválidos.";
+    errorMsg.hidden = false;
+  }
+});
+
+logoutBtn.addEventListener("click", async () => {
+  await logout();
+  showLogin();
+});
+
+async function render() {
+  try {
+    const leads = await getLeads();
+    document.getElementById("rows").innerHTML = leads.map(l => `<tr>
+     <td>${new Date(l.createdAt).toLocaleString("pt-BR")}</td>
+     <td>${l.name}</td>
+     <td><a href="https://wa.me/55${l.phone.replace(/\D/g,"")}" target="_blank">${l.phone}</a></td>
+     <td>${l.city}</td><td>${l.plan}</td>
+     <td><select data-id="${l.id}">${STATUS.map(s => `<option ${s === l.status ? "selected" : ""}>${s}</option>`).join("")}</select></td>
+    </tr>`).join("");
+
+    document.querySelectorAll("select[data-id]").forEach(s =>
+      s.onchange = async () => {
+        try {
+          await updateStatus(s.dataset.id, s.value);
+        } catch (e) {
+          alert("Erro ao atualizar status");
+          render(); // Revert on failure
+        }
+      }
+    );
+  } catch (e) {
+    if (e.message === "Unauthorized") {
+      showLogin();
+    }
+  }
+}
+
+init();
+</script>
+</body>
+</html>

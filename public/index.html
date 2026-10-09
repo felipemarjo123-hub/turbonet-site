@@ -5,7 +5,34 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Turbonet – Internet fibra rápida e estável</title>
   <meta name="description" content="Planos de internet de alta velocidade com suporte 24h. Contrate online.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Turbonet – Internet fibra rápida e estável">
+  <meta property="og:description" content="Planos de internet de alta velocidade com suporte 24h. Contrate online e tenha a melhor conexão.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://turbonet.exemplo.com.br/">
+  <meta property="og:image" content="https://turbonet.exemplo.com.br/og-image.jpg">
+
   <link rel="stylesheet" href="src/styles.css">
+
+  <!-- Schema.org for LocalBusiness / InternetServiceProvider -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "InternetServiceProvider",
+    "name": "Turbonet",
+    "description": "Internet de verdade, sem enrolação. Fibra óptica de alta velocidade.",
+    "telephone": "0800-000-0000",
+    "email": "contato@turbonet.com.br",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "São Paulo",
+      "addressRegion": "SP",
+      "addressCountry": "BR"
+    },
+    "url": "https://turbonet.exemplo.com.br/"
+  }
+  </script>
 </head>
 <body>
   <header><div class="container">
@@ -33,7 +60,9 @@
   <section id="central"><div class="container">
     <h2>Central de atendimento</h2><p class="sub">Dúvidas frequentes e abertura de chamado.</p>
     <div id="faq"></div>
-    <!-- TODO (Jules): integrar área do cliente / 2ª via com o sistema do provedor (IXC/MK-Auth?) -->
+    <div style="margin-top: 30px; text-align: center;">
+      <a href="central.html" class="btn">Acessar Central do Cliente Completa</a>
+    </div>
   </div></section>
 
   <section id="contratar" class="gray"><div class="container">
