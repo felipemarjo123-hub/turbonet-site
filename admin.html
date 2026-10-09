@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turbonet – CRM</title><link rel="stylesheet" href="src/styles.css"></head>
+<body>
+<header><div class="container"><div class="logo">Turbo<span>net</span> CRM</div><nav><a href="index.html">← Site</a></nav></div></header>
+<section><div class="container">
+  <h2>Leads</h2><p class="sub">TODO (Jules): proteger com login antes de publicar.</p>
+  <table><thead><tr><th>Data</th><th>Nome</th><th>WhatsApp</th><th>Cidade</th><th>Plano</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table>
+</div></section>
+<script type="module">
+import { getLeads, updateStatus } from "./src/crm.js";
+const STATUS = ["novo","contatado","negociando","fechado","perdido"];
+function render(){
+  document.getElementById("rows").innerHTML = getLeads().map(l=>`<tr>
+   <td>${new Date(l.createdAt).toLocaleString("pt-BR")}</td><td>${l.name}</td>
+   <td><a href="https://wa.me/55${l.phone.replace(/\D/g,"")}" target="_blank">${l.phone}</a></td>
+   <td>${l.city}</td><td>${l.plan}</td>
+   <td><select data-id="${l.id}">${STATUS.map(s=>`<option ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("");
+  document.querySelectorAll("select[data-id]").forEach(s=>s.onchange=()=>updateStatus(s.dataset.id,s.value));
+}
+render();
+</script>
+</body></html>

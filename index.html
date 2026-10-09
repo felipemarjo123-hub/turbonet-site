@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Turbonet – Internet fibra rápida e estável</title>
+  <meta name="description" content="Planos de internet de alta velocidade com suporte 24h. Contrate online.">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <header><div class="container">
+    <div class="logo">Turbo<span>net</span></div>
+    <nav><a href="#planos">Planos</a><a href="#canais">Canais</a><a href="#central">Central</a><a href="#contratar">Contratar</a></nav>
+  </div></header>
+
+  <section class="hero"><div class="container">
+    <h1>Internet <em>turbinada</em> para sua casa e empresa</h1>
+    <p id="tagline"></p>
+    <div class="actions"><a class="btn" href="#planos">Ver planos</a><a class="btn ghost" href="#contratar">Falar com consultor</a></div>
+    <div class="city"><label>Onde você mora?<br><select id="city"></select></label></div>
+  </div></section>
+
+  <section id="planos"><div class="container">
+    <h2>Escolha seu plano</h2><p class="sub">Sem taxa escondida. Instalação rápida.</p>
+    <div class="grid" id="plans"></div>
+  </div></section>
+
+  <section id="canais" class="gray"><div class="container">
+    <h2>Canais de atendimento</h2><p class="sub">Fale com a gente do jeito que preferir.</p>
+    <div class="grid" id="channels"></div>
+  </div></section>
+
+  <section id="central"><div class="container">
+    <h2>Central de atendimento</h2><p class="sub">Dúvidas frequentes e abertura de chamado.</p>
+    <div id="faq"></div>
+    <!-- TODO (Jules): integrar área do cliente / 2ª via com o sistema do provedor (IXC/MK-Auth?) -->
+  </div></section>
+
+  <section id="contratar" class="gray"><div class="container">
+    <h2>Quero contratar</h2><p class="sub">Deixe seus dados e um consultor entra em contato.</p>
+    <form class="lead" id="lead">
+      <input name="name" placeholder="Nome completo" required>
+      <input name="phone" placeholder="WhatsApp com DDD" required>
+      <select name="city" id="leadCity" required></select>
+      <select name="plan" id="leadPlan" required></select>
+      <button class="btn" type="submit">Enviar</button>
+      <p class="ok" id="ok" hidden>Recebemos! Já já falamos com você.</p>
+    </form>
+  </div></section>
+
+  <footer><div class="container" id="footer"></div></footer>
+  <a class="wa-float" id="wa" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
