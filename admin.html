@@ -1,23 +1,69 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Turbonet – CRM</title><link rel="stylesheet" href="src/styles.css"></head>
+<title>Turbonet – CRM</title><link rel="stylesheet" href="src/styles.css">
+<style>
+  #login-screen { max-width: 400px; margin: 100px auto; background: #fff; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); }
+  #login-screen form { display: flex; flex-direction: column; gap: 15px; }
+  #login-error { color: red; font-weight: bold; margin-top: 10px; }
+</style>
+</head>
 <body>
 <header><div class="container"><div class="logo">Turbo<span>net</span> CRM</div><nav><a href="index.html">← Site</a></nav></div></header>
-<section><div class="container">
-  <h2>Leads</h2><p class="sub">TODO (Jules): proteger com login antes de publicar.</p>
+
+<section id="login-screen" style="display: none;">
+  <h2>Login</h2>
+  <form id="login-form">
+    <input type="password" name="password" placeholder="Senha do Admin" required>
+    <button type="submit" class="btn">Entrar</button>
+    <div id="login-error"></div>
+  </form>
+</section>
+
+<section id="crm-content" style="display: none;"><div class="container">
+  <h2>Leads</h2>
   <table><thead><tr><th>Data</th><th>Nome</th><th>WhatsApp</th><th>Cidade</th><th>Plano</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table>
 </div></section>
+
 <script type="module">
 import { getLeads, updateStatus } from "./src/crm.js";
+
 const STATUS = ["novo","contatado","negociando","fechado","perdido"];
-function render(){
-  document.getElementById("rows").innerHTML = getLeads().map(l=>`<tr>
-   <td>${new Date(l.createdAt).toLocaleString("pt-BR")}</td><td>${l.name}</td>
-   <td><a href="https://wa.me/55${l.phone.replace(/\D/g,"")}" target="_blank">${l.phone}</a></td>
-   <td>${l.city}</td><td>${l.plan}</td>
-   <td><select data-id="${l.id}">${STATUS.map(s=>`<option ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("");
-  document.querySelectorAll("select[data-id]").forEach(s=>s.onchange=()=>updateStatus(s.dataset.id,s.value));
+
+async function render(){
+  try {
+    const leads = await getLeads();
+    document.getElementById("crm-content").style.display = "block";
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("rows").innerHTML = leads.map(l=>`<tr>
+     <td>${new Date(l.createdAt).toLocaleString("pt-BR")}</td><td>${l.name}</td>
+     <td><a href="https://wa.me/55${l.phone.replace(/\D/g,"")}" target="_blank">${l.phone}</a></td>
+     <td>${l.city}</td><td>${l.plan}</td>
+     <td><select data-id="${l.id}">${STATUS.map(s=>`<option ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td></tr>`).join("");
+    document.querySelectorAll("select[data-id]").forEach(s=>s.onchange=()=>updateStatus(s.dataset.id,s.value));
+  } catch (err) {
+    if (err.message === 'UNAUTHORIZED') {
+      document.getElementById("login-screen").style.display = "block";
+      document.getElementById("crm-content").style.display = "none";
+    }
+  }
 }
+
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const password = e.target.password.value;
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password })
+  });
+  if (res.ok) {
+    e.target.reset();
+    render();
+  } else {
+    document.getElementById("login-error").innerText = "Senha incorreta";
+  }
+});
+
 render();
 </script>
 </body></html>

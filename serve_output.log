@@ -1,0 +1,23 @@
+ INFO  Accepting connections at http://localhost:5000
+ HTTP  10/9/2026 1:37:14 PM ::1 GET /
+ HTTP  10/9/2026 1:37:14 PM ::1 Returned 200 in 22 ms
+ HTTP  10/9/2026 1:37:14 PM ::1 GET /src/styles.css
+ HTTP  10/9/2026 1:37:14 PM ::1 Returned 200 in 2 ms
+ HTTP  10/9/2026 1:37:14 PM ::1 GET /src/main.js
+ HTTP  10/9/2026 1:37:14 PM ::1 Returned 200 in 11 ms
+ HTTP  10/9/2026 1:37:15 PM ::1 GET /src/data/site.js
+ HTTP  10/9/2026 1:37:15 PM ::1 GET /src/crm.js
+ HTTP  10/9/2026 1:37:15 PM ::1 Returned 200 in 3 ms
+ HTTP  10/9/2026 1:37:15 PM ::1 Returned 200 in 3 ms
+ HTTP  10/9/2026 1:37:18 PM ::1 POST /api/leads
+ HTTP  10/9/2026 1:37:18 PM ::1 Returned 404 in 3 ms
+ HTTP  10/9/2026 1:37:19 PM ::1 GET /admin.html
+ HTTP  10/9/2026 1:37:19 PM ::1 Returned 301 in 0 ms
+ HTTP  10/9/2026 1:37:19 PM ::1 GET /admin
+ HTTP  10/9/2026 1:37:19 PM ::1 Returned 200 in 2 ms
+ HTTP  10/9/2026 1:37:19 PM ::1 GET /src/styles.css
+ HTTP  10/9/2026 1:37:19 PM ::1 Returned 304 in 3 ms
+ HTTP  10/9/2026 1:37:19 PM ::1 GET /src/crm.js
+ HTTP  10/9/2026 1:37:19 PM ::1 Returned 304 in 1 ms
+ HTTP  10/9/2026 1:37:19 PM ::1 GET /api/leads
+ HTTP  10/9/2026 1:37:19 PM ::1 Returned 404 in 1 ms

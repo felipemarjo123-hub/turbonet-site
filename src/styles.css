@@ -44,3 +44,16 @@ footer{background:var(--ink);color:#bbb;padding:40px 0;font-size:.85rem}
 .wa-float{position:fixed;right:20px;bottom:20px;background:#25d366;color:#fff;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;text-decoration:none;box-shadow:var(--shadow)}
 table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
 th,td{padding:12px;text-align:left;border-bottom:1px solid #eee}th{background:var(--green-dark);color:#fff}
+
+/* Animações e Comparador */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+.testimonials { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 40px; }
+.testimonial { background: #fff; padding: 20px; border-radius: 12px; font-style: italic; border-left: 4px solid var(--orange); box-shadow: var(--shadow); }
+
+.comparator { width: 100%; border-collapse: collapse; margin-top: 40px; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.comparator th, .comparator td { padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
+.comparator th { background: var(--green-dark); color: #fff; }
+.comparator tr:last-child td { border-bottom: none; }
+.comparator td:first-child { text-align: left; font-weight: bold; }

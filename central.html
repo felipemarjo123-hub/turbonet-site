@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Turbonet – Central do Cliente</title>
+  <link rel="stylesheet" href="src/styles.css">
+  <style>
+    .central-grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .box { background: #fff; padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .faturas-list { margin-top: 20px; list-style: none; padding: 0; }
+    .faturas-list li { padding: 15px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .faturas-list li.aberto { border-color: var(--orange); }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+    .badge.pago { background: var(--green); color: white; }
+    .badge.aberto { background: var(--orange); color: white; }
+    #faturas-result { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <header><div class="container">
+    <div class="logo">Turbo<span>net</span></div>
+    <nav><a href="index.html">← Voltar ao site</a></nav>
+  </div></header>
+
+  <section class="hero"><div class="container">
+    <h1>Central do <em>Cliente</em></h1>
+    <p>Acesse suas faturas, abra chamados e tire suas dúvidas.</p>
+  </div></section>
+
+  <section id="servicos" class="gray"><div class="container">
+    <div class="central-grid">
+      <div class="box">
+        <h2>2ª Via de Fatura</h2>
+        <p class="sub">Digite seu CPF/CNPJ para consultar faturas abertas.</p>
+        <form id="fatura-form">
+          <input type="text" name="documento" placeholder="000.000.000-00" required style="margin-bottom: 15px;">
+          <button type="submit" class="btn">Consultar</button>
+        </form>
+        <div id="faturas-result"></div>
+      </div>
+
+      <div class="box">
+        <h2>Abertura de Chamado</h2>
+        <p class="sub">Está com algum problema? Fale com a gente.</p>
+        <form id="chamado-form" style="display:flex; flex-direction:column; gap:10px;">
+          <input type="text" placeholder="Seu Nome" required>
+          <input type="text" placeholder="Telefone/WhatsApp" required>
+          <textarea placeholder="Descreva o problema" required rows="3"></textarea>
+          <button type="button" class="btn" onclick="alert('Chamado aberto com sucesso (mock)')">Abrir Chamado</button>
+        </form>
+      </div>
+    </div>
+  </div></section>
+
+  <section id="faq"><div class="container">
+    <h2>Perguntas Frequentes</h2><p class="sub">Busque por soluções rápidas.</p>
+    <input type="text" id="faq-search" placeholder="Buscar..." style="margin-bottom:20px; max-width: 400px;">
+    <div id="faq-list"></div>
+  </div></section>
+
+  <footer><div class="container" id="footer"></div></footer>
+
+  <script type="module">
+    import { SITE } from "./src/data/site.js";
+
+    document.getElementById("footer").innerHTML = `${SITE.name} · CNPJ ${SITE.cnpj} · ${SITE.razaoSocial}<br>${SITE.phone} · ${SITE.email}`;
+
+    const renderFaq = (filter = "") => {
+      const filtered = SITE.faq.filter(f => f.q.toLowerCase().includes(filter.toLowerCase()) || f.a.toLowerCase().includes(filter.toLowerCase()));
+      document.getElementById("faq-list").innerHTML = filtered.map(f => `<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join("");
+    };
+
+    renderFaq();
+    document.getElementById("faq-search").addEventListener("input", (e) => renderFaq(e.target.value));
+
+    document.getElementById("fatura-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const doc = e.target.documento.value;
+      const res = await fetch('/api/central/faturas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documento: doc })
+      });
+      const data = await res.json();
+      const resultDiv = document.getElementById("faturas-result");
+
+      if (data.length === 0) {
+        resultDiv.innerHTML = "<p>Nenhuma fatura encontrada.</p>";
+      } else {
+        resultDiv.innerHTML = `<ul class="faturas-list">
+          ${data.map(f => `
+            <li class="${f.status}">
+              <div>
+                <strong>Vencimento:</strong> ${new Date(f.vencimento).toLocaleDateString('pt-BR')}<br>
+                <strong>Valor:</strong> R$ ${f.valor}
+                ${f.status === 'aberto' ? `<br><small>Linha: ${f.linhaDigitavel}</small>` : ''}
+              </div>
+              <span class="badge ${f.status}">${f.status.toUpperCase()}</span>
+            </li>
+          `).join('')}
+        </ul><p><small>(Use 12345678909 para teste mock)</small></p>`;
+      }
+    });
+  </script>
+</body>
+</html>
