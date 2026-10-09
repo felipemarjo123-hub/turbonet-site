@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Turbonet – Central do Cliente</title>
+  <link rel="stylesheet" href="src/styles.css">
+  <style>
+    .central-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .central-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #eee;
+    }
+    .central-card h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+    .central-card form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .feedback-msg {
+      margin-top: 10px;
+      font-size: 0.9em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">Turbo<span>net</span></div>
+      <nav>
+        <a href="/">← Voltar ao Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Central do Cliente</h1>
+      <p>Resolva tudo por aqui, de forma rápida e prática.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="central-grid">
+
+        <!-- 2ª Via -->
+        <div class="central-card">
+          <h3>🧾 2ª Via de Fatura</h3>
+          <p>Informe seu CPF/CNPJ para gerar o código PIX ou boleto da sua fatura em aberto.</p>
+          <form id="form-fatura">
+            <input type="text" placeholder="CPF ou CNPJ" required>
+            <button class="btn" type="submit">Gerar 2ª Via</button>
+          </form>
+          <div id="msg-fatura" class="feedback-msg" hidden></div>
+        </div>
+
+        <!-- Abertura de Chamado -->
+        <div class="central-card">
+          <h3>🛠️ Suporte Técnico</h3>
+          <p>Está sem conexão ou com lentidão? Abra um chamado diretamente para nossa equipe.</p>
+          <form id="form-chamado">
+            <input type="text" placeholder="CPF ou CNPJ" required>
+            <select required>
+              <option value="" disabled selected>Selecione o problema...</option>
+              <option>Sem conexão</option>
+              <option>Lentidão</option>
+              <option>Quedas frequentes</option>
+              <option>Outro</option>
+            </select>
+            <textarea placeholder="Detalhes (opcional)" rows="3"></textarea>
+            <button class="btn" type="submit">Abrir Chamado</button>
+          </form>
+          <div id="msg-chamado" class="feedback-msg" hidden></div>
+        </div>
+
+        <!-- Consultar Status -->
+        <div class="central-card">
+          <h3>🔍 Consultar Status</h3>
+          <p>Acompanhe o andamento de um chamado aberto anteriormente.</p>
+          <form id="form-status">
+            <input type="text" placeholder="Número do Protocolo" required>
+            <button class="btn" type="submit">Consultar</button>
+          </form>
+          <div id="msg-status" class="feedback-msg" hidden></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      Turbonet · Central do Cliente
+    </div>
+  </footer>
+
+  <script>
+    // Mock functionality for the Central do Cliente forms
+    document.getElementById('form-fatura').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg-fatura');
+      msg.textContent = "✅ Nenhuma fatura em aberto encontrada (Simulação).";
+      msg.style.color = "green";
+      msg.hidden = false;
+      e.target.reset();
+    });
+
+    document.getElementById('form-chamado').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg-chamado');
+      const protocolo = Math.floor(Math.random() * 1000000);
+      msg.textContent = `✅ Chamado aberto com sucesso! Protocolo: #${protocolo}`;
+      msg.style.color = "green";
+      msg.hidden = false;
+      e.target.reset();
+    });
+
+    document.getElementById('form-status').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg-status');
+      msg.textContent = "ℹ️ O seu chamado está: Em andamento. (Simulação)";
+      msg.style.color = "blue";
+      msg.hidden = false;
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
